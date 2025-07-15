@@ -1,17 +1,18 @@
 package org.example;
 
 import java.util.Scanner;
+/*TODO
+   ATUALIZAR "CONTA" COM METODOS DE TAXAS E SAQUE DEPOSITO E TRANSFERENCIA; V
+    TRANFERENCIA SEM TER COMO ESCOLHER O NOME DO USUARIO;
+    UTILIZAR MAP EM VEZ DE SET(ID COMO CHAVE fácil de localizar nos metodos);
+    FAZER UM BOOLEAN QUE RETORNE ("TRANSAÇÃO DEU CERTO OU ERRADO") AO FINALIZAR AS FUNÇÕES BOOLEAN;
+    METODOS BOOLEAN (RECEBENDO VALOR E (CONTA USUARIO FINAL EM TRANSFERENCIA)) PARA OS TIPOS DE CONTA JÁ FAZENDO OPERAÇÃO;
+    METODOS BOOLEAN (RECEBENDO VALOR E ID-ORIGEM E ID-DESTINO PARA TRANSFERENCIA) QUE VERIFICAM SE A CONTA NÃO É NULL E EM SEGUIDA REALIZAOPERAÇÃO;
+ */
 
 public class Main {
     public static void main(String[] args) {
-        ArmazenamentoContas contas = new ArmazenamentoContas();
-        contas.novaContaCorrente(123, "Rhuan", 1500d, 1000d);
-        contas.novaContaCorrente(1234, "Lidia", 1500d, 1000d);
-        System.out.println("Antes da mudança");
-        contas.getContas().forEach(System.out::println);
-        System.out.println("Depois da mudança");
-        contas.Saque("Rhuan", "Lidia", 1500d);;
-        contas.getContas().forEach(System.out::println);
+
 
     }
 }

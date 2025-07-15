@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class Conta {
     private final long id;
@@ -8,13 +9,41 @@ public abstract class Conta {
     private double saldo;
     private double credito;
 
+    public abstract double calcularTaxaSaque(double valor);
+    public abstract double calcularTaxaDeposito(double valor);
+    public abstract double calcularTaxaTransferencia(double valor);
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ContaCorrente that = (ContaCorrente) o;
         return id == that.getId();
     }
+    public boolean transferencia(Conta conta, double saque) {
+       double taxa = calcularTaxaTransferencia(saque);
+       double total = saque + taxa;
+        if(this.saldo  >= total){
+            this.saldo -= total;
+            conta.deposito(saque);
+            return true;
+        }
+        return false;
+    }
+    public boolean deposito(double depositar) {
+        double taxa = calcularTaxaDeposito(depositar);
+        saldo = saldo - taxa;
+        return true;
+    }
 
+    public boolean saque(double saque) {
+        double taxa = calcularTaxaSaque(saque);
+        double total = saldo + taxa;
+        if(saldo >= total){
+            saldo -= saque + taxa;
+            return true;
+        }
+        return false;
+    }
     public long getId() {
         return id;
     }
@@ -57,11 +86,11 @@ public abstract class Conta {
         return Objects.hashCode(id);
     }
 
-    public Conta(long id, String nome, double saldo, double credito) {
-        this.id = id;
+    public Conta(String nome, double saldo, double credito) {
+        this.id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
         this.nome = nome;
         this.saldo = saldo;
         this.credito = credito;
-
     }
+
 }
