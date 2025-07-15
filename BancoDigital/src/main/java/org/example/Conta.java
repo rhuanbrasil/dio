@@ -22,8 +22,8 @@ public abstract class Conta {
     public boolean transferencia(Conta conta, double saque) {
        double taxa = calcularTaxaTransferencia(saque);
        double total = saque + taxa;
-        if(this.saldo  >= total){
-            this.saldo -= total;
+        if(saldo  >= total){
+            saldo -= total;
             conta.deposito(saque);
             return true;
         }
@@ -31,15 +31,15 @@ public abstract class Conta {
     }
     public boolean deposito(double depositar) {
         double taxa = calcularTaxaDeposito(depositar);
-        saldo = saldo - taxa;
+        saldo += depositar - taxa;
         return true;
     }
 
     public boolean saque(double saque) {
         double taxa = calcularTaxaSaque(saque);
-        double total = saldo + taxa;
+        double total = saque + taxa;
         if(saldo >= total){
-            saldo -= saque + taxa;
+            saldo -= total;
             return true;
         }
         return false;
@@ -73,12 +73,14 @@ public abstract class Conta {
     }
 
     public String toString() {
-        return "ContaCorrente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", saldo=" + saldo +
-                ", credito=" + credito +
-                '}';
+        return String.format(" Conta:\n" +
+                "  %-10s: %s\n" +
+                "  %-10s: %.2f\n" +
+                "  %-10s: %.2f \n",
+                "Nome", nome,
+                "Saldo", saldo,
+                "Crédito", credito
+        );
     }
 
     @Override

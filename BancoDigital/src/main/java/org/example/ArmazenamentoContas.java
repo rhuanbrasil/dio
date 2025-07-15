@@ -1,31 +1,39 @@
 package org.example;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ArmazenamentoContas {
-    private Set<Conta> contas;
+    private Map<Long, Conta> contas;
 
-    public Set<Conta> getContas() {
+
+    public Map<Long, Conta> getContas() {
         return contas;
     }
 
-    public void setContas(Set<Conta> contas) {
-        this.contas = contas;
-    }
-
     public ArmazenamentoContas() {
-        contas = new HashSet<>();
+        contas = new HashMap<>();
     }
 
-    public void novaContaCorrente(long id, String nome, double saldo, double credito) {
-        contas.add(new ContaCorrente(id, nome, saldo, credito));
+    public void adicionar(Conta conta) {
+        contas.put(conta.getId(), conta);
     }
-    public Conta findByName(String name) {
-        return contas.stream().filter(c -> c.getNome().equalsIgnoreCase(name)).findFirst().orElse(null);
+
+    public boolean fazerSaque(long id, double saque) {
+        Conta conta = contas.get(id);
+        if (conta != null) {
+            return conta.saque(saque);
+        }
+        return false;
     }
-    public void Saque(String nome, String nome2, double valor) {
-        findByName(nome).setSaldo(findByName(nome).getSaldo() - valor);
-        findByName(nome2).setSaldo(findByName(nome2).getSaldo() + valor);
+    public boolean fazerTransferencia(long origem_,long destino_, double saque) {
+        Conta origem = contas.get(origem_);
+        Conta destino = contas.get(destino_);
+        if (origem != null && destino != null) {
+            return origem.transferencia(destino, saque);
+        }
+        return false;
     }
 }

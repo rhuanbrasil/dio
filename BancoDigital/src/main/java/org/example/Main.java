@@ -12,8 +12,16 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-
+        ArmazenamentoContas contas = new ArmazenamentoContas();
+        Conta conta = new ContaCorrente("rhuan", 1500d, 1000d);
+        Conta conta2 = new ContaCorrente("julia", 1500d, 1000d);
+        contas.adicionar(conta);
+        contas.adicionar(conta2);
+        System.out.println("Antes da transferencia: \n" + contas.getContas());
+        contas.fazerTransferencia(conta.getId(), conta2.getId(), 1000);
+        System.out.println("Depois da transferencia: \n" + contas.getContas());
+        contas.fazerSaque(conta2.getId(), 1500);
+        System.out.println("Depois do saque: \n" + contas.getContas());
     }
 }
 
