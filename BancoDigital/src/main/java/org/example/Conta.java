@@ -89,7 +89,7 @@ public abstract class Conta {
     }
 
     public Conta(String nome, double saldo, double credito) {
-        this.id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+        this.id = Math.abs(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE % 100000);
         this.nome = nome;
         this.saldo = saldo;
         this.credito = credito;
