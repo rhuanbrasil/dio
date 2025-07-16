@@ -19,30 +19,33 @@ public abstract class Conta {
         ContaCorrente that = (ContaCorrente) o;
         return id == that.getId();
     }
-    public boolean transferencia(Conta conta, double saque) {
-       double taxa = calcularTaxaTransferencia(saque);
-       double total = saque + taxa;
-        if(saldo  >= total){
-            saldo -= total;
-            conta.deposito(saque);
-            return true;
-        }
-        return false;
-    }
-    public boolean deposito(double depositar) {
-        double taxa = calcularTaxaDeposito(depositar);
-        saldo += depositar - taxa;
-        return true;
-    }
-
-    public boolean saque(double saque) {
-        double taxa = calcularTaxaSaque(saque);
-        double total = saque + taxa;
-        if(saldo >= total){
+    public boolean saque(double valor){
+        double taxa =  calcularTaxaSaque(valor);
+        double total = valor + taxa;
+        if (saldo >= total){
             saldo -= total;
             return true;
         }
-        return false;
+        throw(new BusinnesException("Não foi possível realizar a operação de saque. (verifique se tem saldo suficiente)"));
+    }
+    public boolean deposito(double valor){
+        double taxa =  calcularTaxaDeposito(valor);
+        double total = valor + taxa;
+        if (saldo >= total){
+            saldo += valor - taxa;
+            return true;
+        }
+        throw(new BusinnesException("Não foi possível realizar a operação de deposito. (verifique se tem saldo suficiente)"));
+    }
+    public boolean transferencia(Conta destino, double valor){
+        double taxa =  calcularTaxaTransferencia(valor);
+        double total = valor + taxa;
+        if (saldo >= total){
+            saldo -= total;
+            destino.deposito(valor);
+            return true;
+        }
+        throw(new BusinnesException("Não foi possível realizar a operação de transferencia. (verifique se tem saldo suficiente)"));
     }
     public long getId() {
         return id;

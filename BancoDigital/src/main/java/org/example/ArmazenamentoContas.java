@@ -21,18 +21,23 @@ public class ArmazenamentoContas {
         contas.put(conta.getId(), conta);
     }
 
-    public boolean fazerSaque(long id, double saque) {
-        Conta conta = contas.get(id);
-        if (conta != null) {
-            return conta.saque(saque);
+    public boolean fazerDeposito(long id, double valor) {
+        if (contas.get(id) != null){
+           return contas.get(id).deposito(valor);
         }
         return false;
     }
-    public boolean fazerTransferencia(long origem_,long destino_, double saque) {
-        Conta origem = contas.get(origem_);
-        Conta destino = contas.get(destino_);
-        if (origem != null && destino != null) {
-            return origem.transferencia(destino, saque);
+    public boolean fazerSaque(long id, double valor) {
+        if (contas.get(id) != null){
+            return contas.get(id).saque(valor);
+        }
+        return false;
+    }
+    public boolean fazerTransferencia(long id, long contaId, double valor) {
+        Conta inicial = contas.get(id);
+        Conta destino = contas.get(contaId);
+        if (inicial != null && destino != null) {
+           return inicial.transferencia(destino, valor);
         }
         return false;
     }
