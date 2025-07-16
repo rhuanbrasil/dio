@@ -1,25 +1,48 @@
 package org.example;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         //TODO MENU INTERAGIVEL
+        Scanner sc = new Scanner(System.in);
+        Gerenciador g = new Gerenciador();
         try {
-            ArmazenamentoContas contas = new ArmazenamentoContas();
-            Conta conta = new ContaCorrente("rhuan", 1500d, 1000d);
-            Conta conta2 = new ContaCorrente("julia", 1500d, 1000d);
-            Conta conta3 = new ContaPoupança("jonas", 1500d, 0);
+            System.out.println("Vamos começar com seu cadastro!");
+            System.out.println("Digite o seu nome e sobrenome: ");
+            String nome = sc.nextLine();
+            if(!nome.matches("^[a-zA-Z\\s]*$") || nome.split(" ").length < 2) {
+                throw(new BusinnesException("Digite nome e sobrenome, sem simbolos!"));
+            }
+            System.out.println("Digite quanto deseja depositar: ");
+            String saldo = sc.nextLine();
+            saldo = saldo.replace(",", ".");
+            if(!saldo.matches("^[0-9.]+$")) {
+                throw new BusinnesException("Digite um valor válido!");
+            }
+            System.out.println("Deseja criar uma conta poupança(digite 1) ou corrente?(digite 2)");
+            int tipo = sc.nextInt();
+            TipoConta tipoConta = TipoConta.values()[tipo-1];
+            switch (tipoConta) {
+                case POUPANÇA -> {
+                    Conta conta = new ContaPoupança(nome,Double.parseDouble(saldo), 0);
+                    g.adicionar(conta);
+                    System.out.println("Conta criada com sucesso!");
+                    System.out.println("Sua agência é: " + conta.getId());
 
-            contas.adicionar(conta);
-            contas.adicionar(conta2);
-            contas.adicionar(conta3);
-            System.out.println("Antes da transferencia: \n" + contas.getContas());
-            contas.fazerTransferencia(conta.getId(), conta2.getId(), 1000);
-            System.out.println("Depois da transferencia: \n" + contas.getContas());
-            contas.fazerSaque(conta2.getId(), 1500);
-            contas.fazerSaque(conta3.getId(), 1400);
-            System.out.println("Depois do saque: \n" + contas.getContas());
+                }
+                case CORRENTE -> {
+                    System.out.println("Qual o limite de crédito desejado?");
+                    double limite = sc.nextDouble()*0.6;
+                    Conta conta = new ContaCorrente(nome,Double.parseDouble(saldo), limite);
+                    g.adicionar(conta);
+                    System.out.println("Conta criada com sucesso!");
+                    System.out.println("Sua agência é: " + conta.getId());
+
+                }
+            }
+            System.out.println(g.getContas());
         }catch (BusinnesException e) {
             System.out.println(e.getMessage());
         }

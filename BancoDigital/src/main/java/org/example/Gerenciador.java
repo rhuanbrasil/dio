@@ -1,11 +1,9 @@
 package org.example;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-public class ArmazenamentoContas {
+public class Gerenciador {
     private Map<Long, Conta> contas;
 
 
@@ -13,7 +11,7 @@ public class ArmazenamentoContas {
         return contas;
     }
 
-    public ArmazenamentoContas() {
+    public Gerenciador() {
         contas = new HashMap<>();
     }
 
