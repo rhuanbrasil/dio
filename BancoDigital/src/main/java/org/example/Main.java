@@ -5,68 +5,109 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //TODO TRATAMENTO DE ERROS
         Gerenciador g = new Gerenciador();
         cadastro(g);
         menu(g);
     }
     private static void menu(Gerenciador g) {
         Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.println("\nO que deseja fazer agora?\n");
 
-            System.out.println(
-                "1. Cadastrar nova conta\n" +
-                "2. Realizar deposito\n" +
-                "3. Realizar saque\n" +
-                "4. Realizar transferencia\n" +
-                "5. Verificar saldo\n" +
-                "6. Finalizar atendimento"
-        );
-        String valor = sc.nextLine();
-        if(!valor.matches("^[0-9.]+$")) {
-            throw new BusinnesException("Digite um valor válido!\n");
-        }
-        var opcao = Integer.parseInt(valor);
-        var selecionarOpcao = Menu.values()[(opcao-1)];
-        switch (selecionarOpcao) {
-            case CADASTRAR -> cadastro(g);
-            case DEPOSITO -> {
-                System.out.println("Insira sua agência: ");
-                long id = sc.nextInt();
-                System.out.println("Insira o valor de deposito: ");
-                double deposito = sc.nextDouble();
-                g.fazerDeposito(id, deposito);
-                sc.nextLine();
-            }
-            case SAQUE -> {
-                System.out.println("Insira sua agência: ");
-                long id = sc.nextInt();
-                System.out.println("Insira o valor de saque: ");
-                double saque = sc.nextDouble();
-                g.fazerSaque(id, saque);
-                sc.nextLine();
+         while (true) {
+            try {
+                System.out.println("\nO que deseja fazer agora?\n");
 
-            }
-            case TRANSFERIR -> {
-                System.out.println("Insira sua agência: ");
-                long id = sc.nextInt();
-                System.out.println("Insira a agência da conta que deseja transferir: ");
-                long id2 = sc.nextInt();
-                System.out.println("Insira o valor de deposito: ");
-                double quantia = sc.nextDouble();
-                g.fazerTransferencia(id, id2, quantia);
-                sc.nextLine();
-            }
-            case SALDO -> {
-                System.out.println("Insira a agência da conta que deseja verificar: ");
-                long id = sc.nextInt();
-                System.out.println(g.getContas().get(id));
-                sc.nextLine();
+                System.out.println(
+                        "1. Cadastrar nova conta\n" +
+                                "2. Realizar deposito\n" +
+                                "3. Realizar saque\n" +
+                                "4. Realizar transferencia\n" +
+                                "5. Verificar saldo\n" +
+                                "6. Finalizar atendimento"
+                );
+                String valor = sc.next();
+                if (!valor.matches("^[0-6.]+$")) {
+                    throw new BusinnesException("Digite um valor válido!\n");
+                }
+                var opcao = Integer.parseInt(valor);
+                var selecionarOpcao = Menu.values()[(opcao - 1)];
+                switch (selecionarOpcao) {
+                    case CADASTRAR -> cadastro(g);
+                    case DEPOSITO -> {
+                        System.out.println("Insira sua agência: ");
+                        String id = sc.next();
+                        if (!id.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF = Long.parseLong(id);
+                        System.out.println("Insira o valor de deposito: ");
+                        String saldo = sc.next();
+                        saldo = saldo.replace(",", ".");
+                        if (!saldo.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!");
+                        }
+                        var saldoF = Double.parseDouble(saldo);
+                        g.fazerDeposito(idF, saldoF);
+                        sc.nextLine();
+                    }
+                    case SAQUE -> {
+                        System.out.println("Insira sua agência: ");
+                        String id = sc.next();
+                        if (!id.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF = Long.parseLong(id);
+                        System.out.println("Insira o valor de saque: ");
+                        String saldo = sc.next();
+                        saldo = saldo.replace(",", ".");
+                        if (!saldo.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!");
+                        }
+                        var saldoF = Double.parseDouble(saldo);
+                        g.fazerSaque(idF, saldoF);
+                        sc.nextLine();
 
+                    }
+                    case TRANSFERIR -> {
+                        System.out.println("Insira sua agência: ");
+                        String id = sc.next();
+                        if (!id.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF = Long.parseLong(id);
+                        System.out.println("Insira a agência da conta que deseja transferir: ");
+                        String id2 = sc.next();
+                        if (!id2.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF2 = Long.parseLong(id);
+                        System.out.println("Insira o valor de deposito: ");
+                        String saldo = sc.next();
+                        saldo = saldo.replace(",", ".");
+                        if (!saldo.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!");
+                        }
+                        var saldoF = Double.parseDouble(saldo);
+                        g.fazerTransferencia(idF, idF2, saldoF);
+                        sc.nextLine();
+                    }
+                    case SALDO -> {
+                        System.out.println("Insira a agência da conta que deseja verificar: ");
+                        String id = sc.next();
+                        if (!id.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF = Long.parseLong(id);
+                        System.out.println(g.getContas().get(idF));
+                        sc.nextLine();
+
+                    }
+                    case SAIR -> System.exit(0);
+                }
+            }catch (BusinnesException e){
+                System.out.println(e.getMessage());
             }
-            case SAIR -> System.exit(0);
-        }}
+            }
+
     }
         private static void cadastro(Gerenciador g) {
         while(true) {
