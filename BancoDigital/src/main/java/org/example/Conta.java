@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,6 +10,11 @@ public abstract class Conta {
     private String nome;
     private double saldo;
     private double credito;
+    private List<Double> extrato;
+
+    public List<Double> getExtrato() {
+        return extrato;
+    }
 
     public abstract double calcularTaxaSaque(double valor);
     public abstract double calcularTaxaDeposito(double valor);
@@ -96,6 +103,7 @@ public abstract class Conta {
         this.nome = nome;
         this.saldo = saldo;
         this.credito = credito;
+        this.extrato = new ArrayList<>();
     }
 
 }

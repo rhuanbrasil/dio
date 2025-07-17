@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -22,10 +23,11 @@ public class Main {
                                 "3. Realizar saque\n" +
                                 "4. Realizar transferencia\n" +
                                 "5. Verificar saldo\n" +
-                                "6. Finalizar atendimento"
+                                "6. Verificar extrato\n" +
+                                "7. Sair\n"
                 );
                 String valor = sc.next();
-                if (!valor.matches("^[0-6.]+$")) {
+                if (!valor.matches("^[0-7.]+$")) {
                     throw new BusinnesException("Digite um valor válido!\n");
                 }
                 var opcao = Integer.parseInt(valor);
@@ -35,7 +37,7 @@ public class Main {
                     case DEPOSITO -> {
                         System.out.println("Insira sua agência: ");
                         String id = sc.next();
-                        if (!id.matches("^[0-9.]+$")) {
+                        if (!id.matches("^[0-9.]+$") || (g.getContas().get(Long.parseLong(id)) == null)) {
                             throw new BusinnesException("Digite um valor válido!\n");
                         }
                         var idF = Long.parseLong(id);
@@ -52,7 +54,7 @@ public class Main {
                     case SAQUE -> {
                         System.out.println("Insira sua agência: ");
                         String id = sc.next();
-                        if (!id.matches("^[0-9.]+$")) {
+                        if (!id.matches("^[0-9.]+$") || (g.getContas().get(Long.parseLong(id)) == null)) {
                             throw new BusinnesException("Digite um valor válido!\n");
                         }
                         var idF = Long.parseLong(id);
@@ -70,7 +72,7 @@ public class Main {
                     case TRANSFERIR -> {
                         System.out.println("Insira sua agência: ");
                         String id = sc.next();
-                        if (!id.matches("^[0-9.]+$")) {
+                        if (!id.matches("^[0-9.]+$") || (g.getContas().get(Long.parseLong(id)) == null)) {
                             throw new BusinnesException("Digite um valor válido!\n");
                         }
                         var idF = Long.parseLong(id);
@@ -93,13 +95,23 @@ public class Main {
                     case SALDO -> {
                         System.out.println("Insira a agência da conta que deseja verificar: ");
                         String id = sc.next();
-                        if (!id.matches("^[0-9.]+$")) {
+                        if (!id.matches("^[0-9.]+$") || (g.getContas().get(Long.parseLong(id)) == null)) {
                             throw new BusinnesException("Digite um valor válido!\n");
                         }
                         var idF = Long.parseLong(id);
                         System.out.println(g.getContas().get(idF));
                         sc.nextLine();
 
+                    }
+                    case EXTRATO -> {
+                        System.out.println("Digite a agência da conta que deseja ver: ");
+                        String id = sc.next();
+                        if (!id.matches("^[0-9.]+$")) {
+                            throw new BusinnesException("Digite um valor válido!\n");
+                        }
+                        var idF = Long.parseLong(id);
+                        Collections.reverse(g.getContas().get(idF).getExtrato());
+                        g.getContas().get(idF).getExtrato().forEach(System.out::println);
                     }
                     case SAIR -> System.exit(0);
                 }
@@ -138,6 +150,7 @@ public class Main {
                     g.adicionar(conta);
                     System.out.println("Conta criada com sucesso!");
                     System.out.println("Sua agência é: " + conta.getId());
+                    g.getContas().get(conta.getId()).getExtrato().add(Double.parseDouble(saldo));
                     return;
                 }
                 case CORRENTE -> {
@@ -147,6 +160,7 @@ public class Main {
                     g.adicionar(conta);
                     System.out.println("Conta criada com sucesso!\n");
                     System.out.println("Sua agência é: " + conta.getId());
+                    g.getContas().get(conta.getId()).getExtrato().add(Double.parseDouble(saldo));
                     return;
                 }
             }

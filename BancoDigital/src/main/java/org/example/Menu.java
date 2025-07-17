@@ -6,5 +6,6 @@ public enum Menu {
     SAQUE,
     TRANSFERIR,
     SALDO,
+    EXTRATO,
     SAIR,
 }

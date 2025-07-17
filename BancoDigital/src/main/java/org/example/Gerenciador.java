@@ -1,6 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Gerenciador {
@@ -21,12 +23,15 @@ public class Gerenciador {
 
     public boolean fazerDeposito(long id, double valor) {
         if (contas.get(id) != null){
+
+            contas.get(id).getExtrato().add((valor - contas.get(id).calcularTaxaDeposito(valor)));
            return contas.get(id).deposito(valor);
         }
         return false;
     }
     public boolean fazerSaque(long id, double valor) {
         if (contas.get(id) != null){
+            contas.get(id).getExtrato().add(-(valor + contas.get(id).calcularTaxaSaque(valor)));
             return contas.get(id).saque(valor);
         }
         return false;
@@ -35,7 +40,9 @@ public class Gerenciador {
         Conta inicial = contas.get(id);
         Conta destino = contas.get(contaId);
         if (inicial != null && destino != null) {
-           return inicial.transferencia(destino, valor);
+            inicial.getExtrato().add(-(valor + inicial.calcularTaxaTransferencia(valor)));
+            destino.getExtrato().add((valor - destino.calcularTaxaDeposito(valor)));
+            return inicial.transferencia(destino, valor);
         }
         return false;
     }
